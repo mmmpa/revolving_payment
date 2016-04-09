@@ -1,0 +1,229 @@
+$card-radius: 3px
+$card-margin: 3px
+$card-border: 0
+$card-opened-bg: #fff
+$card-closed-bg: #2c3e50
+$card-masked-bg: #000
+$card-red: #e74c3c
+$card-black: #2c3e50
+$card-number-size: 20px
+$card-suit-size: 16px
+$card-suit-margin: $card-suit-size * 0.3
+$card-width: 50px
+$card-height: 90px
+
+$game-radius: 3px
+$belt-color: #1abc9c
+$card-area-background: #bdc3c7
+
+$link-color: #3498db
+
+$card-area-width: $card-width * 13 + $card-margin * 14
+$card-area-height: $card-height * 4 + $card-margin * 5
+
+$side-padding: 20px
+
+$title-font-size: 20px
+$normal-font-size: 14px
+$message-font-size: 14px
+
+h1, ul
+  margin: 0
+  paddinng: 0
+
+*
+  box-sizing: border-box
+  letter-spacing: 0.1em
+
+body
+  margin: 0
+
+a
+  font-weight: bold
+  cursor: pointer
+
+button
+  background: $link-color
+  color: #fff
+  padding: 10px 20px
+  font-size: $title-font-size
+  border: 0
+  margin: 20px 0
+  border-radius: $card-radius
+  cursor: pointer
+  box-shadow: 0 4px 4px #ccc
+
+.game-body
+  width: $card-area-width
+  margin: 0 auto
+  border-radius: $game-radius
+  overflow: hidden
+
+.game-header
+  $height: 40px
+  color: #fff
+  background: $belt-color
+  height: $height
+  line-height: $height
+  overflow: hidden
+  padding: 0 $side-padding
+  h1
+    float: left
+    font-size: $title-font-size
+  ul
+    float: right
+    li
+      display: inline-block
+      font-size: $normal-font-size
+
+.game-footer
+  $height: 40px
+  background: $belt-color
+  color: #fff
+  height: $height
+  line-height: $height
+  overflow: hidden
+  padding: 0 $side-padding
+  font-size: $message-font-size
+  .left-message
+    float: left
+    position: relative
+  .right-message
+    float: right
+    position: relative
+  .game-message
+    white-space: nowrap
+    position: absolute
+    right: 0
+    top: 30px
+    transition: 0.5s ease-in-out
+    &.rise
+      top: 0
+    &.sweep
+      top: -30px
+.game-field
+  position: relative
+
+.game-result
+  z-index: 10000
+  position: absolute
+  top: 0
+  left: 0
+  background: rgba(0, 0, 0, 0.3)
+  .game-container
+    display: table-cell
+    vertical-align: middle
+    text-align: center
+    width: $card-area-width
+    height: $card-area-height
+  section
+    display: inline-block
+    background: #fff
+    border-radius: $game-radius
+    padding: 20px 10px
+    h1
+      font-size: $title-font-size
+    h2
+      font-size: $title-font-size * 1.5
+    button
+      margin: 0 10px
+
+.game-player
+  display: table-cell
+  vertical-align: middle
+  text-align: center
+  background: $card-area-background
+  width: $card-area-width
+  height: $card-area-height
+  .game-selector
+    padding: 0
+    margin: 0
+    border-radius: $card-radius
+    background: #fff
+    padding: $side-padding 0
+    display: inline-block
+  .game-first,
+  .game-second
+    display: inline-block
+    padding: $side-padding
+    h1
+      font-weight: normal
+      font-size: $title-font-size * 1.5
+    select
+      font-size: $title-font-size
+      background: #fff
+      padding: 10px $side-padding
+      border: 0
+      border-bottom: 2px solid $link-color
+
+.card-table
+  padding: 0 0 $card-margin $card-margin
+  background: $card-area-background
+  width: $card-area-width
+  height: $card-area-height
+
+.card
+  position: relative
+  cursor: pointer
+  display: inline-block
+  box-sizing: border-box
+  vertical-align: middle
+  overflow: hidden
+  width: $card-width
+  height: $card-height
+  border-radius: $card-radius
+  margin: $card-margin $card-margin 0 0
+  border: $card-border
+  font-weight: bold
+  text-align: center
+  line-height: $card-height
+  font-size: $card-number-size
+  &.closed
+    background: $card-closed-bg
+  &.masked
+    background: $card-masked-bg
+  &.opened
+    background: $card-opened-bg
+    &.dia,
+    &.heart
+      color: $card-red
+    &.spade,
+    &.club
+      color: $card-black
+    &.dia:before,
+    &.heart:before,
+    &.spade:before,
+    &.club:before,
+    &.dia:after,
+    &.heart:after,
+    &.spade:after,
+    &.club:after
+      font-size: $card-suit-size
+      display: inline-block
+      position: absolute
+      line-height: 100%
+    &.dia:before,
+    &.heart:before,
+    &.spade:before,
+    &.club:before
+      top: $card-suit-margin
+      left: $card-suit-margin
+    &.dia:after,
+    &.heart:after,
+    &.spade:after,
+    &.club:after
+      bottom: $card-suit-margin
+      right: $card-suit-margin
+      transform: rotate(180deg)
+    &.dia:before,
+    &.dia:after
+      content: '♦'
+    &.heart:before,
+    &.heart:after
+      content: '♥'
+    &.spade:before,
+    &.spade:after
+      content: '♠'
+    &.club:before,
+    &.club:after
+      content: '♣'

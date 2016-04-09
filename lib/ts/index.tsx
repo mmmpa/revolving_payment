@@ -19,7 +19,7 @@ class Revolver extends React.Component<RevolverP, RevolverS> {
     });
   }
 
-  compute(){
+  compute() {
     let {total, rate, payment} = this.state;
     let paymentHistory = new RevolvingPayment(total, rate, payment).compute();
     this.setState({paymentHistory});
@@ -64,10 +64,10 @@ class Revolver extends React.Component<RevolverP, RevolverS> {
 
 class Selector extends React.Component<{},{}> {
   render() {
-    let {valueList, suffix, onChange} = this.props;
+    let {valueList, suffix, onChange, value} = this.props;
 
-    return <select onChange={(e:Event)=> onChange((e.target as HTMLSelectElement).value)}>
-      {valueList.map((v)=> <option key="v" value={v}>{v + (suffix || '')}</option>)}
+    return <select {...{value}} onChange={(e:Event)=> onChange((e.target as HTMLSelectElement).value)}>
+      {valueList.map((value)=> <option key={value}  {...{value}}>{value + (suffix || '')}</option>)}
     </select>
   }
 }
@@ -94,9 +94,9 @@ class PaymentTable extends React.Component<{paymentHistory:Payment[]},{}> {
 
 class PaymentRow extends React.Component<{payment:Payment},{}> {
   render() {
-    let {count, payment, repayment, interest, rest} = this.props.payment;
+    let {count, payment, repayment, interest, rest, finish} = this.props.payment;
 
-    return <tr>
+    return <tr className={finish && 'finish'}>
       <th>{`${count}回目`}</th>
       <td>{`${payment}円`}</td>
       <td>{`${repayment}円/`}</td>
@@ -107,18 +107,36 @@ class PaymentRow extends React.Component<{payment:Payment},{}> {
 }
 
 class Payment {
-  constructor(public count, public payment, public repayment, public interest, public rest) {
-
+  constructor(public count, public payment, public repayment, public interest, public rest, public finish:boolean = false) {
+    if(this.rest < 0){
+      this.payment += this.rest;
+      this.repayment += this.rest;
+      this.rest = 0;
+    }
   }
 }
 
-class RevolvingPayment{
-  constructor(public total, public rate, public payment){
+class RevolvingPayment {
+  constructor(public total, public rate, public payment) {
 
   }
 
-  compute():Payment[]{
-    return [];
+  getInterest(rest) {
+    return rest * this.rate / 365 * 30 >> 0;
+  }
+
+  compute():Payment[] {
+    let rest = this.total;
+    let result = [new Payment(0, 0, 0, interest, rest, rest <= 0)];
+
+    for (let i = 1; rest > 0; i++) {
+      let interest = this.getInterest(rest);
+      let repayment = this.payment - interest;
+      rest -= interest;
+      result.push(new Payment(i, this.payment, repayment, interest, rest, rest <= 0));
+    }
+
+    return result;
   }
 }
 

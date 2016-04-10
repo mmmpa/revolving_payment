@@ -58,7 +58,7 @@ class Revolver extends React.Component<RevolverP, RevolverS> {
       return;
     }
 
-    let paymentStepper = new RevolvingPayment(total, rate, payment).generateStepper();
+    let paymentStepper = new RevolvingPayment(total, rate, payment, type === 'revolving').generateStepper();
     let paymentHistory = [new Payment(0, 0, 0, 0, total)];
     this.setState({paymentStepper, paymentHistory, isFinished: false});
   }

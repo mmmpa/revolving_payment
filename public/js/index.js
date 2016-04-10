@@ -19081,7 +19081,7 @@ var Revolver = (function (_super) {
         if (oldState && total === oldState.total && rate === oldState.rate && payment === oldState.payment && type === oldState.type) {
             return;
         }
-        var paymentStepper = new RevolvingPayment(total, rate, payment).generateStepper();
+        var paymentStepper = new RevolvingPayment(total, rate, payment, type === 'revolving').generateStepper();
         var paymentHistory = [new Payment(0, 0, 0, 0, total)];
         this.setState({ paymentStepper: paymentStepper, paymentHistory: paymentHistory, isFinished: false });
     };

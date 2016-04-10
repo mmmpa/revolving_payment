@@ -1,229 +1,234 @@
-$card-radius: 3px
-$card-margin: 3px
-$card-border: 0
-$card-opened-bg: #fff
-$card-closed-bg: #2c3e50
-$card-masked-bg: #000
-$card-red: #e74c3c
-$card-black: #2c3e50
-$card-number-size: 20px
-$card-suit-size: 16px
-$card-suit-margin: $card-suit-size * 0.3
-$card-width: 50px
-$card-height: 90px
+$font_biggest_map: (name: 'biggest', size: 42px)
+$font_bigger_map: (name: 'bigger', size: 26px)
+$font_big_map: (name: 'big', size: 18px)
+$font_normal_map: (name: 'normal', size: 14px)
+$font_small_map: (name: 'small', size: 12px)
+$font_smaller_map: (name: 'smaller', size: 10px)
+$font_smallest_map: (name: 'smallest', size: 8px)
 
-$game-radius: 3px
-$belt-color: #1abc9c
-$card-area-background: #bdc3c7
+$font_maps: $font_biggest_map, $font_bigger_map, $font_big_map, $font_normal_map, $font_small_map, $font_smaller_map, $font_smaller_map, $font_smallest_map
 
-$link-color: #3498db
+$font_normal: 'Helvetica Neue', 'Helvetica', 'Arial', 'Hiragino Kaku Gothic Pro', 'Meiryo', 'MS PGothic', sans-serif
+.read
+  line-height: 170%
 
-$card-area-width: $card-width * 13 + $card-margin * 14
-$card-area-height: $card-height * 4 + $card-margin * 5
+$button_height: 4px
+$button_padding: 7px 15px 6px 15px
+$button_padding_thin: 2px 15px 1px 15px
+$button_radius: 3px
 
-$side-padding: 20px
+$focus_index: 1000
+$input_focus_border: 20px
+$input_padding: 5px 10px
+$input_radius: 3px
+$input-layout-padding: 10px
+$input-button: 16px
 
-$title-font-size: 20px
-$normal-font-size: 14px
-$message-font-size: 14px
+$label-radius: 3px
+$label-padding: 3px 6px
 
-h1, ul
-  margin: 0
-  paddinng: 0
+$widths: 300, 400, 500, 600, 700, 800, 900
 
-*
+$black_map: (name: 'black', light: #333, dark: #000)
+$silver_map: (name: 'silver', light: #ecf0f1, dark: #bdc3c7)
+$gray_map: (name: 'gray', light: #95a5a6, dark: #7f8c8d)
+$turquoise_map: (name: 'turquoise', light: #1abc9c, dark: #16a085)
+$green_map: (name: 'green', light: #2ecc71, dark: #27ae60)
+$blue_map: (name: 'blue', light: #3498db, dark: #2980b9)
+$purple_map: (name: 'purple', light: #9b59b6, dark: #8e44ad)
+$navy_map: (name: 'navy', light: #34495e, dark: #2c3e50)
+$yellow_map: (name: 'yellow', light: #f1c40f, dark: #f39c12)
+$orange_map: (name: 'orange', light: #e67e22, dark: #d35400)
+$red_map: (name: 'red', light: #e74c3c, dark: #c0392b)
+
+$white: #fff
+$black: map_get($black_map, light)
+$black_dark: map_get($black_map, dark)
+$silver: map_get($silver_map, light)
+$silver_dark: map_get($silver_map, dark)
+$turquoise: map_get($turquoise_map, light)
+$turquoise_dark: map_get($turquoise_map, dark)
+$green: map_get($green_map, light)
+$green_dark: map_get($green_map, dark)
+$blue: map_get($blue_map, light)
+$blue_dark: map_get($blue_map, dark)
+$purple: map_get($purple_map, light)
+$purple_dark: map_get($purple_map, dark)
+$navy: map_get($navy_map, light)
+$navy_dark: map_get($navy_map, dark)
+$yellow: map_get($yellow_map, light)
+$yellow_dark: map_get($yellow_map, dark)
+$orange: map_get($orange_map, light)
+$orange_dark: map_get($orange_map, dark)
+$red: map_get($red_map, light)
+$red_dark: map_get($red_map, dark)
+$gray: map_get($gray_map, light)
+$gray_dark: map_get($gray_map, dark)
+
+$color_maps: $black_map, $silver_map, $gray_map, $turquoise_map, $green_map, $blue_map, $purple_map, $navy_map, $yellow_map, $orange_map, $red_map
+
+$input_focus_color: $green
+
+@for $i from 1 through length($color_maps)
+  $color_map: nth($color_maps, $i)
+  .text-#{map_get($color_map, name)}
+    color: map_get($color_map, dark)
+  .bg-#{map_get($color_map, name)}
+    color: $white
+    background-color: map_get($color_map, dark)
+  .label-#{map_get($color_map, name)}
+    background-color: map_get($color_map, dark)
+    border-radius: $label-radius
+    color: $white
+    display: inline-block
+    padding: $label-padding
+    vertical-align: middle
+  .border-#{map_get($color_map, name)},
+  table.border-#{map_get($color_map, name)}
+    border: 1px solid map_get($color_map, dark)
+    th,
+    td
+      border: 1px solid map_get($color_map, dark)
+  table.stripe-#{map_get($color_map, name)} tr:nth-child(2n-1)
+    background-color: map_get($color_map, dark)
+    color: $white
+  table.stripe-light-#{map_get($color_map, name)} tr:nth-child(2n-1)
+    background-color: map_get($color_map, light)
+  table.next-stripe-#{map_get($color_map, name)} tr:nth-child(2n)
+    background-color: map_get($color_map, dark)
+    color: $white
+  table.next-stripe-light-#{map_get($color_map, name)} tr:nth-child(2n)
+    background-color: map_get($color_map, light)
+
+@mixin button_def($height, $color, $color_dark)
+  text-shadow: 0 -1px $color_dark
+  background-color: $color
+  box-shadow: 0 $height $color_dark
+
+.button
+  cursor: pointer
+  border: 1px solid transparent
+  border-radius: $button_radius
   box-sizing: border-box
-  letter-spacing: 0.1em
+  color: $white
+  display: inline-block
+  font-weight: normal
+  margin: 0
+  outline: none
+  padding: $button_padding
+  position: relative
+  text-align: center
+  text-decoration: none
+  top: -$button_height/2
+  &.thin
+    padding: $button_padding_thin
+  @for $i from 1 through length($color_maps)
+    $color_map: nth($color_maps, $i)
+    &.#{map_get($color_map, name)}
+      @include button_def($button_height, map_get($color_map, light), map_get($color_map, dark))
+
+@for $i from 1 through length($font_maps)
+  $font_map: nth($font_maps, $i)
+  .#{map_get($font_map, name)}
+    font-size: map_get($font_map, size)
+    line-height: map_get($font_map, size)*1.2
+  input[type=radio].#{map_get($font_map, name)},
+  input[type=checkbox].#{map_get($font_map, name)}
+    width: map_get($font_map, size)
+    height: map_get($font_map, size)
 
 body
-  margin: 0
+  background: #eee
 
-a
-  font-weight: bold
-  cursor: pointer
-
-button
-  background: $link-color
-  color: #fff
-  padding: 10px 20px
-  font-size: $title-font-size
-  border: 0
-  margin: 20px 0
-  border-radius: $card-radius
-  cursor: pointer
-  box-shadow: 0 4px 4px #ccc
-
-.game-body
-  width: $card-area-width
-  margin: 0 auto
-  border-radius: $game-radius
-  overflow: hidden
-
-.game-header
-  $height: 40px
-  color: #fff
-  background: $belt-color
-  height: $height
-  line-height: $height
-  overflow: hidden
-  padding: 0 $side-padding
-  h1
-    float: left
-    font-size: $title-font-size
-  ul
-    float: right
-    li
-      display: inline-block
-      font-size: $normal-font-size
-
-.game-footer
-  $height: 40px
-  background: $belt-color
-  color: #fff
-  height: $height
-  line-height: $height
-  overflow: hidden
-  padding: 0 $side-padding
-  font-size: $message-font-size
-  .left-message
-    float: left
-    position: relative
-  .right-message
-    float: right
-    position: relative
-  .game-message
-    white-space: nowrap
-    position: absolute
-    right: 0
-    top: 30px
-    transition: 0.5s ease-in-out
-    &.rise
-      top: 0
-    &.sweep
-      top: -30px
-.game-field
-  position: relative
-
-.game-result
-  z-index: 10000
-  position: absolute
-  top: 0
-  left: 0
-  background: rgba(0, 0, 0, 0.3)
-  .game-container
-    display: table-cell
-    vertical-align: middle
-    text-align: center
-    width: $card-area-width
-    height: $card-area-height
-  section
-    display: inline-block
-    background: #fff
-    border-radius: $game-radius
-    padding: 20px 10px
-    h1
-      font-size: $title-font-size
-    h2
-      font-size: $title-font-size * 1.5
-    button
-      margin: 0 10px
-
-.game-player
-  display: table-cell
-  vertical-align: middle
-  text-align: center
-  background: $card-area-background
-  width: $card-area-width
-  height: $card-area-height
-  .game-selector
-    padding: 0
-    margin: 0
-    border-radius: $card-radius
-    background: #fff
-    padding: $side-padding 0
-    display: inline-block
-  .game-first,
-  .game-second
-    display: inline-block
-    padding: $side-padding
-    h1
-      font-weight: normal
-      font-size: $title-font-size * 1.5
-    select
-      font-size: $title-font-size
-      background: #fff
-      padding: 10px $side-padding
-      border: 0
-      border-bottom: 2px solid $link-color
-
-.card-table
-  padding: 0 0 $card-margin $card-margin
-  background: $card-area-background
-  width: $card-area-width
-  height: $card-area-height
-
-.card
-  position: relative
-  cursor: pointer
+.revolvingPayment
+  background: #fff
   display: inline-block
-  box-sizing: border-box
-  vertical-align: middle
-  overflow: hidden
-  width: $card-width
-  height: $card-height
-  border-radius: $card-radius
-  margin: $card-margin $card-margin 0 0
-  border: $card-border
-  font-weight: bold
-  text-align: center
-  line-height: $card-height
-  font-size: $card-number-size
-  &.closed
-    background: $card-closed-bg
-  &.masked
-    background: $card-masked-bg
-  &.opened
-    background: $card-opened-bg
-    &.dia,
-    &.heart
-      color: $card-red
-    &.spade,
-    &.club
-      color: $card-black
-    &.dia:before,
-    &.heart:before,
-    &.spade:before,
-    &.club:before,
-    &.dia:after,
-    &.heart:after,
-    &.spade:after,
-    &.club:after
-      font-size: $card-suit-size
+  padding: 20px
+
+  p.notice
+    margin: 0 0 20px
+    font-size: 12px
+  em
+    padding-right: 3px
+  .finished
+    @extend .bigger
+    padding-bottom: 40px
+  h1
+    @extend .big
+    background: $silver
+    padding: 10px 20px
+    border-radius: 3px
+    margin: 0
+    font-weight: normal
+  select
+    @extend .big
+    border: 0
+    border-bottom: 2px solid $gray_dark
+    background: rgba(255, 255, 255, 0)
+    padding: 10px 15px
+    option
+      text-align: right
+
+  .plan
+    padding-bottom: 10px
+    select,
+    p
       display: inline-block
-      position: absolute
-      line-height: 100%
-    &.dia:before,
-    &.heart:before,
-    &.spade:before,
-    &.club:before
-      top: $card-suit-margin
-      left: $card-suit-margin
-    &.dia:after,
-    &.heart:after,
-    &.spade:after,
-    &.club:after
-      bottom: $card-suit-margin
-      right: $card-suit-margin
-      transform: rotate(180deg)
-    &.dia:before,
-    &.dia:after
-      content: '♦'
-    &.heart:before,
-    &.heart:after
-      content: '♥'
-    &.spade:before,
-    &.spade:after
-      content: '♠'
-    &.club:before,
-    &.club:after
-      content: '♣'
+      vertical-align: middle
+    p
+      padding: 0 10px
+      font-size: 14px
+
+  .comment
+    margin: 40px 0 0 0
+  .result
+    margin: 20px 0 0 0
+    p
+      padding: 0 20px
+      em
+        @extend .bigger
+        font-weight: bold
+        font-style: normal
+  .type
+    padding-bottom: 30px
+    label
+      display: block
+      font-size: 12px
+      margin: 10px 0
+      p
+        margin: 0 0 0 20px
+      strong
+        font-size: 14px
+  .historyTable
+    margin: 10px 0 0 0
+    width: 600px
+    border-collapse: collapse
+    text-align: center
+    thead
+      th
+        border-bottom: 2px solid $gray
+        width: 20%
+    tbody
+      td,
+      th
+        width: 20%
+        text-align: right
+        font-size: 12px
+        font-family: monospace
+        border-bottom: 1px solid $gray
+        &.repayment
+          color: $green
+        &.interest
+          color: $red
+      em
+        font-size: 1.5em
+        font-style: normal
+        font-weight: bold
+
+  .computation
+    text-align: center
+    margin: 40px 0 0 0
+    label
+      margin: 5px 0 0 0
+      display: block
+      text-align: center

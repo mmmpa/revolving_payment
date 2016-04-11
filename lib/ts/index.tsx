@@ -13,7 +13,15 @@ interface RevolverS {
   rate:number,
   paymentHistory:Payment[],
   paymentStepper:RevolvingStepper,
-  isFinished:boolean
+  isFinished:boolean,
+  auto:boolean,
+  once:boolean,
+  type:LoanType
+}
+
+enum LoanType{
+  Revolving,
+  Payday
 }
 
 function separate(num) {
@@ -33,7 +41,8 @@ class Revolver extends React.Component<RevolverP, RevolverS> {
       isFinished: false,
       once: false,
       auto: false,
-      type: 'revolving'
+      type: LoanType.Revolving,
+      once: false
     });
   }
 
@@ -58,7 +67,7 @@ class Revolver extends React.Component<RevolverP, RevolverS> {
       return;
     }
 
-    let paymentStepper = new RevolvingPayment(total, rate, payment, type === 'revolving').generateStepper();
+    let paymentStepper = new RevolvingPayment(total, rate, payment, type).generateStepper();
     let paymentHistory = [new Payment(0, 0, 0, 0, total)];
     this.setState({paymentStepper, paymentHistory, isFinished: false});
   }
@@ -160,8 +169,8 @@ class Revolver extends React.Component<RevolverP, RevolverS> {
           <p className="separator">ずつ返す</p>
         </div>
         <div className="type">
-          <label onClick={()=> this.setState({type: 'revolving'})}> <input type="radio" checked={this.state.type === 'revolving'}/><strong>リボ払い</strong><p>返済額+手数料=お支払い額</p><p>月々の支払額が変動する。</p></label> <label onClick={()=> this.setState({type: 'loan'})}><input
-          type="radio" checked={this.state.type === 'loan'}/><strong>消費者金融</strong><p>お支払い額から手数料が引かれ、残りが返済になる</p><p>月々の支払額が変動しない。</p></label>
+          <label onClick={()=> this.setState({type: LoanType.Revolving})}> <input type="radio" checked={this.state.type === LoanType.Revolving}/><strong>リボ払い</strong><p>返済額+手数料=お支払い額</p><p>月々の支払額が変動する。</p></label> <label
+          onClick={()=> this.setState({type: LoanType.Payday})}><input type="radio" checked={this.state.type === LoanType.Payday}/><strong>消費者金融</strong><p>お支払い額から手数料が引かれ、残りが返済になる</p><p>月々の支払額が変動しない。</p></label>
         </div>
       </section>
       <section className="revolvingResult">
@@ -218,16 +227,16 @@ class PaymentRow extends React.Component<{payment:Payment},{}> {
 }
 
 class RevolvingPayment {
-  constructor(public total, public rate, public payment, public revolving = true) {
+  constructor(public total, public rate, public payment, public type:LoanType = LoanType.Revolving) {
     this.rate /= 100;
   }
 
-  getInterest(rest) {
+  getInterest(rest):number {
     return Math.round(rest * this.rate / 365 * 30);
   }
 
-  generateStepper() {
-    return new RevolvingStepper(this, this.revolving);
+  generateStepper():RevolvingStepper {
+    return new RevolvingStepper(this, this.type);
   }
 }
 
@@ -236,7 +245,7 @@ class RevolvingStepper {
   payment:number;
   rest:number;
 
-  constructor(public configuration:RevolvingPayment, public revolving:boolean) {
+  constructor(public configuration:RevolvingPayment, public type:LoanType) {
     this.count = 0;
     this.payment = configuration.payment;
     this.rest = configuration.total;
@@ -246,25 +255,34 @@ class RevolvingStepper {
     return this.rest <= 0;
   }
 
-  getInterest(rest) {
+  step():Payment {
+    switch (this.type) {
+      case LoanType.Revolving:
+        return this.stepRevolving();
+      case LoanType.Payday:
+        return this.stepPayday();
+    }
+  }
+
+  private getInterest(rest):number {
     return this.configuration.getInterest(rest);
   }
 
-  step():Payment {
+  private stepRevolving():Payment {
     let interest = this.getInterest(this.rest - this.payment * 0.5);
+    this.rest -= this.payment;
+    this.count += 1;
 
-    if (this.revolving) {
-      this.rest -= this.payment;
-      this.count += 1;
+    return new Payment(this.count, this.payment + interest, this.payment, interest, this.rest, this.rest <= 0)
+  }
 
-      return new Payment(this.count, this.payment + interest, this.payment, interest, this.rest, this.rest <= 0)
-    } else {
-      let repayment = this.payment - interest
-      this.rest -= repayment;
-      this.count += 1;
+  private stepPayday():Payment {
+    let interest = this.getInterest(this.rest - this.payment * 0.5);
+    let repayment = this.payment - interest;
+    this.rest -= repayment;
+    this.count += 1;
 
-      return new Payment(this.count, this.payment, repayment, interest, this.rest, this.rest <= 0)
-    }
+    return new Payment(this.count, this.payment, repayment, interest, this.rest, this.rest <= 0)
   }
 }
 
@@ -283,7 +301,7 @@ class Starter {
     ReactDOM.render(
       <Revolver {...{
         totalList: [100000, 200000, 300000, 400000, 500000],
-        rateList: [12, 15, 17.8],
+        rateList: [12, 15, 19.8, 29.2],
         paymentList: [5000, 10000, 15000, 20000, 50000, 100000]
       }}/>
       , dom);
